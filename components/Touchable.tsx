@@ -19,22 +19,22 @@ const TouchableButton: React.FC<TouchableButtonProps> = ({
   children,
   style,
 }) => {
-  if (Platform.OS === "android") {
-    return (
-      <TouchableNativeFeedback
-        onPress={onPress}
-        background={TouchableNativeFeedback.Ripple("#ffffff", true)}
-      >
-        <View style={style}>{children}</View>
-      </TouchableNativeFeedback>
-    );
-  } else {
+  // if (Platform.OS === "android") {
+  //   return (
+  //     <TouchableNativeFeedback
+  //       onPress={onPress}
+  //       background={TouchableNativeFeedback.Ripple("#e9e9e9", true)}
+  //     >
+  //       <View style={style}>{children}</View>
+  //     </TouchableNativeFeedback>
+  //   );
+  // } else {
     return (
       <TouchableOpacity onPress={onPress} activeOpacity={0.6}>
         <View style={style}>{children}</View>
       </TouchableOpacity>
     );
   }
-};
+// };
 
 export default TouchableButton;

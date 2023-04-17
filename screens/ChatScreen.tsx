@@ -11,6 +11,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../constants/theme";
 import MessageBubble from "../components/MessageBubble";
 import { dummyData } from "../data";
+import { StatusBar } from "expo-status-bar";
+
 
 const ChatScreen = () => {
   const [text, setText] = useState<string>("");
@@ -35,6 +37,7 @@ const ChatScreen = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={keyboardVerticalOffset}
     >
+      <StatusBar backgroundColor="#fff" style="dark" />
       <View style={styles.container}>
         <FlatList
           style={styles.main}
