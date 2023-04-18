@@ -5,34 +5,38 @@ import {
 } from "firebase/auth";
 import { projectAuth } from "../firebase/config";
 import { AuthContext } from "../store/auth-context";
+import LoadingScreen from "./LoadingScreen";
 
 const LoginScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const authCtx = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const handleSignIn = async () => {
     try {
+      setLoading(true);
       const userData: any = await signInWithEmailAndPassword(
         projectAuth,
         email,
         password
-      );
-    //   console.log("User signed in successfully");
-
-    // console.log("LoginScreen.tsx update", userData._tokenResponse.idToken)
-      
+      );      
       if(userData._tokenResponse.idToken){
+        console.log(userData)
+        authCtx.setUid(userData.user.uid);
         authCtx.login(userData._tokenResponse.idToken);
-        // console.log("LoginScreen.tsx", authCtx.isAuthenticated);
+        setLoading(false);
       }
-      // Do something after successful sign-in, e.g. navigate to another screen
     } catch (error: any) {
       console.error("Error signing in: ", error);
       setError(error.message);
     }
   };
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
 
   return (
@@ -63,9 +67,6 @@ const LoginScreen = ({ navigation }: any) => {
       >
         <Text>Don't have an account? Sign Up</Text>
       </Pressable>
-      {/* <Pressable style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Un</Text>
-      </Pressable> */}
     </View>
   );
 };

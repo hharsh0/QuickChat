@@ -7,26 +7,35 @@ export const AuthContext = createContext({
   isAuthenticated: false,
   login: (token) => {},
   logout: () => {},
+  uid: "",
+  setUid: (uid) => {},
 });
 
 export default AuthContextProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState();
+  const [uid, setUid] = useState();
   const userisLoggedIn = !!authToken;
 
   const login = (token) => {
-    console.log("loggin in")
+    console.log("loggin in");
     setAuthToken(token);
-    console.log(token)
+    console.log(token);
     SecureStore.setItemAsync("token", token);
   };
 
-  useEffect(()=>{console.log("auth-ctx", userisLoggedIn)},[userisLoggedIn])
+  useEffect(() => {
+    console.log("auth-ctx", userisLoggedIn);
+  }, [userisLoggedIn]);
 
   useEffect(() => {
     const getToken = async () => {
       const token = await SecureStore.getItemAsync("token");
+      const uid = await SecureStore.getItemAsync("uid");
       if (token) {
         setAuthToken(token);
+      }
+      if(uid){
+        setUid(uid);
       }
     };
     getToken();
@@ -35,17 +44,20 @@ export default AuthContextProvider = ({ children }) => {
   const logout = () => {
     setAuthToken(null);
   };
+  
+  const setId = (uid) => {
+    setUid(uid);
+    SecureStore.setItemAsync("uid", uid);
+  }
 
   const value = {
     token: authToken,
     isAuthenticated: userisLoggedIn,
     login: login,
     logout: logout,
+    uid: uid,
+    setUid: setId,
   };
 
-  
-
-  return (
-    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
