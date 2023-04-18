@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, Platform } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image, Platform, SafeAreaView } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -10,40 +10,42 @@ const ChatNav = () => {
   const name = (route.params as { name: string } | undefined)?.name;
 
   return (
-    <View style={styles.container}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back-outline" size={32} color="#0584FE" />
-        </TouchableOpacity>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 10,
-            marginLeft: 10,
-          }}
-        >
-          <Image
-            source={{ uri: "https://picsum.photos/200/300" }}
+    <SafeAreaView style={styles.outerContainer}>
+      <View style={styles.container}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back-outline" size={32} color="#0584FE" />
+          </TouchableOpacity>
+          <View
             style={{
-              width: 36,
-              height: 36,
-              borderRadius: 25,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 10,
+              marginLeft: 10,
             }}
-          />
-          <Text style={{ fontSize: 22, }}>{name}</Text>
+          >
+            <Image
+              source={{ uri: "https://picsum.photos/200/300" }}
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 25,
+              }}
+            />
+            <Text style={{ fontSize: 22 }}>{name}</Text>
+          </View>
+        </View>
+
+        <View style={{ flexDirection: "row", gap: 20, alignItems: "center" }}>
+          <TouchableOpacity>
+            <Ionicons name="call" size={28} color="#0584FE" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Ionicons name="videocam" size={28} color="#0584FE" />
+          </TouchableOpacity>
         </View>
       </View>
-
-      <View style={{ flexDirection: "row", gap: 20, alignItems: 'center' }}>
-        <TouchableOpacity>
-          <Ionicons name="call" size={28} color="#0584FE" />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Ionicons name="videocam" size={28} color="#0584FE" />
-        </TouchableOpacity>
-      </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -59,4 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: Platform.OS === "android" ? 44 : 0,
   },
+  outerContainer:{
+    flex: 1,
+  }
 });

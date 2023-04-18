@@ -1,4 +1,5 @@
-import React from "react";
+import React,{useEffect,useContext} from "react";
+import { AuthContext } from "../store/auth-context";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MainScreen from "../screens/MainScreen";
 import PeopleScreen from "../screens/PeopleScreen";
@@ -8,6 +9,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../constants/theme";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ChatNav from "../components/ChatNav";
+import LoginScreen from "../screens/LoginScreen";
+import SignUpScreen from "../screens/SignUpScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -17,12 +20,30 @@ interface tabIcon {
   size: number;
 }
 
-const MainStack = () => {
+
+export const AuthStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="login"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="signup"
+        component={SignUpScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export const MainStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="MainScreen"
-        component={Navigation}
+        component={BottomNavigation}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -36,7 +57,7 @@ const MainStack = () => {
   );
 };
 
-const Navigation = () => {
+const BottomNavigation = () => {
   return (
     <>
       <Tab.Navigator>
@@ -81,4 +102,18 @@ const Navigation = () => {
   );
 };
 
-export default MainStack;
+const Navigation = ()=>{
+  const authCtx = useContext(AuthContext);
+
+  useEffect(()=>{
+    console.log("index.tsx", authCtx.isAuthenticated);
+  },[authCtx.isAuthenticated])
+
+  return (
+    <>
+      {authCtx.isAuthenticated ? <MainStack /> : <AuthStack />}
+    </>
+  );
+}
+
+export default Navigation

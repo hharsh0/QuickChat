@@ -1,22 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, SafeAreaView } from 'react-native';
-import Navigation from './navigation';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-
+import AuthContextProvider from "./store/auth-context";
+import Navigation from "./navigation";
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      {/* <StatusBar style="dark" /> */}
+    <AuthContextProvider>
+      <StatusBar style="dark" />
       <NavigationContainer>
         <Navigation />
       </NavigationContainer>
-    </SafeAreaView>
+    </AuthContextProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

@@ -1,22 +1,25 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Pressable } from "react-native";
 import { theme } from "../constants/theme";
 import { Ionicons } from "@expo/vector-icons";
+import { AuthContext } from "../store/auth-context";
+import { useContext } from "react";
 
 interface props {
   title: string;
 }
 
 const Header = ({ title }: props) => {
+  const authCtx = useContext(AuthContext);
   return (
     <View style={styles.container}>
       <View style={styles.head}>
-        <View style={styles.start}>
+        <Pressable onPress={()=> authCtx.logout()} style={styles.start}>
           <Image
             source={{ uri: "https://picsum.photos/200/300" }}
             style={styles.img}
           />
           <Text style={styles.title}>{title}</Text>
-        </View>
+        </Pressable>
         {title !== "Discover" && (
           <View style={styles.end}>
             <TouchableOpacity style={styles.icon}>

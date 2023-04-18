@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Platform } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Platform, SafeAreaView } from 'react-native'
 import ListItem from '../components/ListItem'
 import Header from '../components/Header'
 import {data} from "../data"
@@ -15,7 +15,7 @@ const MainScreen = () => {
     console.log(name)
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#fff" style="dark" />
       <Header title="Chats" />
       <FlatList
@@ -28,7 +28,7 @@ const MainScreen = () => {
           />
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

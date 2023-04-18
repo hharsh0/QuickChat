@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native'
 import React from 'react'
 import Header from '../components/Header'
 
 const PeopleScreen = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header title="People" />
-    </View>
+    </SafeAreaView>
   )
 }
 
