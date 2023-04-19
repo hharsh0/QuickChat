@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, Platform, SafeAreaView } from "react-native";
-import React from "react";
+import React, {useEffect} from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
@@ -8,6 +8,12 @@ const ChatNav = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const name = (route.params as { name: string } | undefined)?.name;
+  const groupId = (route.params as { groupId: string } | undefined)?.groupId;
+
+
+  useEffect(()=>{
+  console.log("chatNav.tsx", name, groupId);
+  },[])
 
   return (
     <SafeAreaView style={styles.outerContainer}>

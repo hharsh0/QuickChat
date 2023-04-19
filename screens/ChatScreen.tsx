@@ -7,17 +7,29 @@ import {
   Platform,
   SafeAreaView
 } from "react-native";
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../constants/theme";
 import MessageBubble from "../components/MessageBubble";
 import { dummyData } from "../data";
 import { StatusBar } from "expo-status-bar";
+import { useRoute } from "@react-navigation/native";
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
+
 
 
 const ChatScreen = () => {
   const [text, setText] = useState<string>("");
   const [messages, setMessages] = useState(dummyData);
+  const route = useRoute();
+  const name = (route.params as { name: string } | undefined)?.name;
+  const groupId = (route.params as { groupId: string } | undefined)?.groupId;
 
   const sendMessage = () => {
     if (text) {
