@@ -5,13 +5,12 @@ import {
   KeyboardAvoidingView,
   FlatList,
   Platform,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../constants/theme";
 import MessageBubble from "../components/MessageBubble";
-import { dummyData } from "../data";
 import { StatusBar } from "expo-status-bar";
 import { useRoute } from "@react-navigation/native";
 import {
@@ -20,29 +19,53 @@ import {
   where,
   orderBy,
   onSnapshot,
+  addDoc,
+  serverTimestamp,
 } from "firebase/firestore";
-
+import { projectFirestore } from "../firebase/config";
+import { AuthContext } from "../store/auth-context";
 
 
 const ChatScreen = () => {
   const [text, setText] = useState<string>("");
-  const [messages, setMessages] = useState(dummyData);
+  const [messages, setMessages] = useState([]);
   const route = useRoute();
   const name = (route.params as { name: string } | undefined)?.name;
   const groupId = (route.params as { groupId: string } | undefined)?.groupId;
+  const messageRef = collection(projectFirestore, "messages", groupId, "message");
+  const authCtx = useContext(AuthContext);
 
-  const sendMessage = () => {
-    if (text) {
-      setMessages([
-        ...messages,
-        { id: (messages.length + 1).toString(), message: text, sentByMe: true },
-      ]);
+  useEffect(() => {
+    const messagesQuery = query(messageRef, orderBy("createdAt"));
+
+    const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+      const messagesList = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          ...data,
+          id: doc.id,
+        };
+      });
+      setMessages(messagesList);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  const sendMessage = async () => {
+    if (text && authCtx) {
+      await addDoc(messageRef, {
+        message: text,
+        sentBy: authCtx.uid,
+        createdAt: serverTimestamp(),
+      });
       setText("");
     }
   };
 
   const keyboardVerticalOffset = Platform.OS === "ios" ? 90 : 90;
-
 
   return (
     <SafeAreaView style={styles.outerContainer}>
@@ -56,9 +79,9 @@ const ChatScreen = () => {
           <FlatList
             style={styles.main}
             data={[...messages].reverse()}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item: any) => item.id}
             renderItem={({ item }) => (
-              <MessageBubble item={item.message} sentByMe={item.sentByMe} />
+              <MessageBubble item={item.message} sentBy={item.sentBy} />
             )}
             inverted
           />
@@ -91,7 +114,7 @@ const ChatScreen = () => {
 export default ChatScreen;
 
 const styles = StyleSheet.create({
-  outerContainer:{
+  outerContainer: {
     flex: 1,
   },
   container: {

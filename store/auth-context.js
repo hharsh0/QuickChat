@@ -11,7 +11,7 @@ export const AuthContext = createContext({
   setUid: (uid) => {},
 });
 
-export default AuthContextProvider = ({ children }) => {
+export default AuthContextProvider = ({children}) => {
   const [authToken, setAuthToken] = useState();
   const [uid, setUid] = useState();
   const userisLoggedIn = !!authToken;

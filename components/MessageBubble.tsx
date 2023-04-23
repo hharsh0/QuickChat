@@ -1,8 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {useContext} from 'react'
 import { theme } from '../constants/theme'
+import { AuthContext } from '../store/auth-context'
 
-const MessageBubble = ({item, sentByMe}:any) => {
+const MessageBubble = ({item, sentBy}:any) => {
+  const authCtx = useContext(AuthContext);
+  const sentByMe = sentBy === authCtx.uid;
   return (
     <View
       style={[
