@@ -19,6 +19,9 @@ import {
   query,
   where,
   getDocs,
+  orderBy,
+  limit,
+  doc
 } from "firebase/firestore";
 import { projectFirestore } from "../firebase/config";
 
@@ -40,6 +43,8 @@ const MainScreen = () => {
   const authCtx = useContext(AuthContext);
   const [groups, setGroups] = useState<any>([]);
   const [detailsToRender, setDetailsToRender] = useState<any>();
+  const [latestMessages, setLatestMessages] = useState<any>();
+
 
   const currentUser = authCtx.uid;
 
@@ -122,8 +127,41 @@ const MainScreen = () => {
          setDetailsToRender(newArray)
        });
       });
+
+      getLatestMessages(otherUsersArray).then((latestMessages) => {
+        setLatestMessages(latestMessages);
+        console.log(latestMessages);
+      });
     }
   }, [groups]);
+
+  const getLatestMessages = async (otherUsersArray: any) => {
+    const latestMessages: any = [];
+
+    // Loop through the group IDs and query the messages collection for each group
+    for (const obj of otherUsersArray) {
+      const groupId = obj.docId;
+      // console.log(groupId)
+      const q = query(
+        collection(projectFirestore, "messages", groupId, "message"),
+        orderBy("createdAt", "desc"),
+        limit(1)
+      );
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        // console.log(querySnapshot.docs[0].data());
+        const messageData = querySnapshot.docs[0].data();
+        latestMessages.push({
+          groupId: groupId,
+          message: messageData.message,
+          createdAt: messageData.createdAt,
+          sentBy: messageData.sentBy,
+        });
+      }
+    }
+
+    return latestMessages;
+  };
 
   const handlePress = (item:any) => {
     navigation.navigate("Chat", { name: item.name, groupId: item.docId });
@@ -138,8 +176,16 @@ const MainScreen = () => {
         renderItem={({ item }) => (
           <ListItem
             onPress={() => handlePress(item)}
-            name={item.name ?item.name : currentUser}
-            detail={item.docId}
+            name={item.name ? item.name : currentUser}
+            detail={
+              latestMessages?.find(
+                (message: any) => message.groupId === item.docId
+              )?.sentBy === currentUser? "You: " + latestMessages?.find(
+                (message: any) => message.groupId === item.docId
+              )?.message : latestMessages?.find(
+                (message: any) => message.groupId === item.docId
+              )?.message
+            }
           />
         )}
       />
