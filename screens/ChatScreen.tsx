@@ -28,7 +28,7 @@ import { AuthContext } from "../store/auth-context";
 
 const ChatScreen = () => {
   const [text, setText] = useState<string>("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<any>([]);
   const route = useRoute();
   const name = (route.params as { name: string } | undefined)?.name;
   const groupId = (route.params as { groupId: string } | undefined)?.groupId;

@@ -1,4 +1,4 @@
-import { StyleSheet, SafeAreaView, FlatList } from "react-native";
+import { StyleSheet, SafeAreaView, FlatList, Platform } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import Header from "../components/Header";
 import PeopleListItem from "../components/PeopleListItem";
@@ -9,7 +9,6 @@ import {
   where,
   query,
   getDocs,
-  updateDoc,
   doc,
   setDoc
 } from "firebase/firestore";
@@ -124,5 +123,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    marginTop: Platform.OS === "android" ? 40 : 0,
   },
 });

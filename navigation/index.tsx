@@ -11,6 +11,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ChatNav from "../components/ChatNav";
 import LoginScreen from "../screens/LoginScreen";
 import SignUpScreen from "../screens/SignUpScreen";
+import Header from "../components/Header";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -71,6 +72,7 @@ const BottomNavigation = () => {
             tabBarActiveTintColor: theme.colors.bottomTabIcon,
             tabBarLabelStyle: { display: "none" },
             headerShown: false,
+            // header: () => <Header title="Chats" />,
           }}
         />
         <Tab.Screen
@@ -106,7 +108,7 @@ const Navigation = ()=>{
   const authCtx = useContext(AuthContext);
 
   useEffect(()=>{
-    console.log("index.tsx", authCtx.isAuthenticated);
+    // console.log("index.tsx", authCtx.isAuthenticated);
   },[authCtx.isAuthenticated])
 
   return (

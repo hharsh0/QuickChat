@@ -29,7 +29,7 @@ const otherUsers = (data: any, currentUser: string) => {
     );
     return { docId: doc.id, otherUserId: otherUserIds[0] };
   });
-  console.log(otherUsersArray);
+  // console.log(otherUsersArray);
   return otherUsersArray;
 };
 
@@ -39,9 +39,7 @@ const MainScreen = () => {
   const navigation: any = useNavigation();
   const authCtx = useContext(AuthContext);
   const [groups, setGroups] = useState<any>([]);
-  const [otherUserId, setOtherUserId] = useState<string>();
-  const [otherUserDetails, setOtherUserDetails] = useState<any>([]);
-  const [otherUserName, setOtherUserName] = useState<string>();
+  const [detailsToRender, setDetailsToRender] = useState<any>();
 
   const currentUser = authCtx.uid;
 
@@ -64,6 +62,7 @@ const MainScreen = () => {
             const groupData = doc.data();
             docs.push({ id: doc.id, ...groupData });
           });
+          // console.log(docs)
           setGroups(docs);
         });
       }
@@ -75,36 +74,59 @@ const MainScreen = () => {
     return unsubscribe;
   }, [currentUser]);
 
+  const getUserName = async (data: any) => {
+    const usersCollection = collection(projectFirestore, "users");
+    const namesArrayWithUid: any = [];
 
+    // Use the `await` keyword to wait for `getDocs` to complete before continuing
+    const querySnapshot = await getDocs(usersCollection);
 
-  // to loop through users collection and find name of other user
-  useEffect(() => {
-    if(groups){
-     setOtherUserDetails(otherUsers(groups, currentUser))
-    }
-    const getData = async () => {
-      if (otherUserId) {
-        const q = query(
-          collection(projectFirestore, "users"),
-          where("uid", "==", otherUserId)
-        );
-        try {
-          const querySnapshot = await getDocs(q);
-          if (querySnapshot.docs.length > 0) {
-            const userData = querySnapshot.docs[0].data();
-            querySnapshot.docs.map((doc)=>console.log("inside",doc.data()));
-            setOtherUserName(userData.displayName);
-          }
-        } catch (error) {
-          console.error("Error searching users: ", error);
+    querySnapshot.forEach((doc) => {
+      data.map((user: any) => {
+        if (user.otherUserId === doc.id) {
+          namesArrayWithUid.push({
+            name: doc.data().displayName,
+            uid: doc.id,
+          });
         }
-      }
-    };
-    getData();
+      });
+    });
+
+    // Return the array from the function
+    return namesArrayWithUid;
+  };
+
+
+  // to loop through users collection and find name of other user and make new array with name, uid and docId
+  useEffect(() => {
+    if (groups) {
+      const otherUsersArray = otherUsers(groups, currentUser);
+      // console.log(otherUsersArray)
+
+      getUserName(otherUsers(groups, currentUser)).then((namesArrayWithUid) => {
+        // console.log(namesArrayWithUid);
+       const newArray:any = [];
+       otherUsersArray.forEach((otherUser:any) => {
+         const correspondingName = namesArrayWithUid.find(
+           (name:any) => name.uid === otherUser.otherUserId
+         );
+         if (correspondingName) {
+           const newItem = {
+             uid: otherUser.otherUserId,
+             name: correspondingName.name,
+             docId: otherUser.docId,
+           };
+           newArray.push(newItem);
+         }
+        //  console.log(newArray)
+         setDetailsToRender(newArray)
+       });
+      });
+    }
   }, [groups]);
 
   const handlePress = (item:any) => {
-    navigation.navigate("Chat", { name: item.otherUserId, groupId: item.docId });
+    navigation.navigate("Chat", { name: item.name, groupId: item.docId });
   };
 
   return (
@@ -112,14 +134,12 @@ const MainScreen = () => {
       <StatusBar backgroundColor="#fff" style="dark" />
       <Header title="Chats" />
       <FlatList
-        data={otherUserDetails}
+        data={detailsToRender}
         renderItem={({ item }) => (
           <ListItem
             onPress={() => handlePress(item)}
-            name={item.otherUserId ?item.otherUserId : currentUser}
+            name={item.name ?item.name : currentUser}
             detail={item.docId}
-            // name={item.name}
-            // detail={item.detail}
           />
         )}
       />
