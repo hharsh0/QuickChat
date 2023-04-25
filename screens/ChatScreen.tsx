@@ -65,7 +65,7 @@ const ChatScreen = () => {
     }
   };
 
-  const keyboardVerticalOffset = Platform.OS === "ios" ? 90 : 90;
+  const keyboardVerticalOffset = Platform.OS === "ios" ? 90 : 0;
 
   return (
     <SafeAreaView style={styles.outerContainer}>

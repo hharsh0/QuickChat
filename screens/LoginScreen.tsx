@@ -23,7 +23,7 @@ const LoginScreen = ({ navigation }: any) => {
         password
       );      
       if(userData._tokenResponse.idToken){
-        console.log(userData)
+        // console.log(userData)
         authCtx.setUid(userData.user.uid);
         authCtx.login(userData._tokenResponse.idToken);
         setLoading(false);

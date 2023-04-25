@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Pressable } from "react-native";
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Pressable, SafeAreaView } from "react-native";
 import { theme } from "../constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../store/auth-context";
