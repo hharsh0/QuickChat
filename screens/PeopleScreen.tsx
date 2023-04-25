@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, FlatList } from "react-native";
+import { StyleSheet, SafeAreaView, FlatList } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import Header from "../components/Header";
 import PeopleListItem from "../components/PeopleListItem";
@@ -13,7 +13,7 @@ import {
   doc,
   setDoc
 } from "firebase/firestore";
-import { projectFirestore, projectAuth } from "../firebase/config";
+import { projectFirestore } from "../firebase/config";
 import { AuthContext } from "../store/auth-context";
 import { StatusBar } from "expo-status-bar";
 import LoadingScreen from "./LoadingScreen";
