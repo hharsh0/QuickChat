@@ -97,11 +97,12 @@ const ChatScreen = () => {
                 autoCapitalize="none"
               />
               <View style={styles.inputIcon} onTouchEnd={sendMessage}>
-                {text ? (
+                {/* {text ? (
                   <Ionicons name="send" size={28} color="#fff" />
                 ) : (
                   <Ionicons name="mic" size={28} color="#fff" />
-                )}
+                )} */}
+                <Ionicons name="send" size={28} color="#fff" />
               </View>
             </View>
           </View>

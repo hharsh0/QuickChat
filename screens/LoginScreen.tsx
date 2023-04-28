@@ -57,6 +57,7 @@ const LoginScreen = ({ navigation }: any) => {
         onChangeText={setPassword}
         secureTextEntry
         autoCapitalize="none"
+        onSubmitEditing={handleSignIn}
       />
       <Pressable style={styles.button} onPress={handleSignIn}>
         <Text style={styles.buttonText}>Sign In</Text>

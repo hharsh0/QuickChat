@@ -21,7 +21,7 @@ import LoadingScreen from "./LoadingScreen";
 const PeopleScreen = ({navigation}:any) => {
   const [users, setUsers] = useState([]);
   const authCtx = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -32,6 +32,7 @@ const PeopleScreen = ({navigation}:any) => {
           users.push({ ...doc.data(), id: doc.id });
         });
         setUsers(users);
+        setLoading(false);
       }
     );
     return () => unsubscribe();

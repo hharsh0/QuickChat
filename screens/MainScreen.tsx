@@ -24,6 +24,8 @@ import {
   doc
 } from "firebase/firestore";
 import { projectFirestore } from "../firebase/config";
+import LoadingScreen from "./LoadingScreen";
+
 
 const otherUsers = (data: any, currentUser: string) => {
   const otherUsersArray = data.map((doc: any) => {
@@ -44,6 +46,7 @@ const MainScreen = () => {
   const [groups, setGroups] = useState<any>([]);
   const [detailsToRender, setDetailsToRender] = useState<any>();
   const [latestMessages, setLatestMessages] = useState<any>();
+  const [loading, setLoading] = useState(true);
 
 
   const currentUser = authCtx.uid;
@@ -69,6 +72,7 @@ const MainScreen = () => {
           });
           // console.log(docs)
           setGroups(docs);
+          setLoading(false);
         });
       }
     };
@@ -166,6 +170,10 @@ const MainScreen = () => {
   const handlePress = (item:any) => {
     navigation.navigate("Chat", { name: item.name, groupId: item.docId });
   };
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>

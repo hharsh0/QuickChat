@@ -87,7 +87,7 @@ const BottomNavigation = () => {
             headerShown: false,
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Discover"
           component={DiscoverScreen}
           options={{
@@ -98,7 +98,7 @@ const BottomNavigation = () => {
             tabBarLabelStyle: { display: "none" },
             headerShown: false,
           }}
-        />
+        /> */}
       </Tab.Navigator>
     </>
   );
