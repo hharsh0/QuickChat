@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
+import { View, Text, TextInput, Pressable, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { projectAuth, projectFirestore } from "../firebase/config";
 import { AuthContext } from "../store/auth-context";
@@ -56,8 +56,15 @@ const SignUpScreen = ({ navigation }: any) => {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
+    >
       <Text style={styles.title}>Sign Up</Text>
+      <Text style={styles.info}>
+        Enter your details below to set up a new account.
+      </Text>
       {error && <Text style={styles.error}>{error}</Text>}
       <TextInput
         style={styles.input}
@@ -81,16 +88,16 @@ const SignUpScreen = ({ navigation }: any) => {
         secureTextEntry
         autoCapitalize="none"
       />
-      <Pressable style={styles.button} onPress={handleSignUp}>
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Sign Up</Text>
-      </Pressable>
-      <Pressable
+      </TouchableOpacity>
+      <TouchableOpacity
         onPress={() => navigation.navigate("login")}
         style={{ marginTop: 16 }}
       >
         <Text>Already have an account? Log In</Text>
-      </Pressable>
-    </View>
+      </TouchableOpacity>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -111,18 +118,21 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 4,
-    padding: 10,
+    borderRadius: 40,
+    padding: 16,
     marginVertical: 10,
     width: "100%",
+    fontSize: 18,
   },
   button: {
     backgroundColor: "#2196F3",
     padding: 10,
-    borderRadius: 4,
+    borderRadius: 40,
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
+    width: 200,
+    marginTop: 20,
+    fontSize: 18,
   },
   buttonText: {
     color: "#fff",
@@ -131,5 +141,10 @@ const styles = StyleSheet.create({
   error: {
     color: "red",
     marginBottom: 10,
+  },
+  info: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: "#333",
   },
 });

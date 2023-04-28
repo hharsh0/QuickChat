@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
@@ -31,6 +31,7 @@ const LoginScreen = ({ navigation }: any) => {
     } catch (error: any) {
       console.error("Error signing in: ", error);
       setError(error.message);
+      setLoading(false);
     }
   };
 
@@ -40,35 +41,44 @@ const LoginScreen = ({ navigation }: any) => {
 
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      {error && <Text style={styles.error}>{error}</Text>}
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        autoCapitalize="none"
-        onSubmitEditing={handleSignIn}
-      />
-      <Pressable style={styles.button} onPress={handleSignIn}>
-        <Text style={styles.buttonText}>Sign In</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => navigation.navigate("signup")}
-        style={{ marginTop: 16 }}
-      >
-        <Text>Don't have an account? Sign Up</Text>
-      </Pressable>
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
+    >
+      {/* <View style={styles.container}> */}
+        <Text style={styles.title}>Login</Text>
+        <Text style={styles.info}>
+          Enter your credentials below to continue.
+        </Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          autoCapitalize="none"
+          onSubmitEditing={handleSignIn}
+        />
+        {error && <Text style={styles.error}>{error}</Text>}
+        <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+          <Text style={styles.buttonText}>Sign In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("signup")}
+          style={{ marginTop: 16 }}
+        >
+          <Text>Don't have an account? Sign Up</Text>
+        </TouchableOpacity>
+      {/* </View> */}
+    </KeyboardAvoidingView>
   );
 };
 
@@ -89,18 +99,21 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 4,
-    padding: 10,
+    borderRadius: 40,
+    padding: 16,
     marginVertical: 10,
     width: "100%",
+    fontSize: 18,
   },
   button: {
     backgroundColor: "#2196F3",
     padding: 10,
-    borderRadius: 4,
+    borderRadius: 40,
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
+    width: 200,
+    marginTop: 20,
+    fontSize: 18,
   },
   buttonText: {
     color: "#fff",
@@ -109,5 +122,10 @@ const styles = StyleSheet.create({
   error: {
     color: "red",
     marginBottom: 10,
+  },
+  info: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: "#333",
   },
 });
