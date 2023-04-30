@@ -14,10 +14,9 @@ const PeopleListItem = ({ onPress, name, uid }: any) => {
           <Text style={styles.name}>{name}</Text>
         </View>
       </View>
-      <View style={styles.icon}>
-        {/* <MaterialCommunityIcons name="hand-wave" size={20} color="#000000" /> */}
+      {/* <View style={styles.icon}>
         <Image source={require("../assets/wave.png")} />
-      </View>
+      </View> */}
     </TouchableButton>
   );
 };

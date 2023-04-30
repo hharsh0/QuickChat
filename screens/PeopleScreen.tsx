@@ -1,4 +1,4 @@
-import { StyleSheet, SafeAreaView, FlatList, Platform } from "react-native";
+import { StyleSheet, SafeAreaView, FlatList, Platform, Text } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import Header from "../components/Header";
 import PeopleListItem from "../components/PeopleListItem";
@@ -107,8 +107,9 @@ const PeopleScreen = ({navigation}:any) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="People" />
+      <Header title="Contacts" />
       <StatusBar backgroundColor="#fff" style="dark" />
+      {/* <Text style={styles.info}>All Contacts</Text> */}
       <FlatList
         data={users}
         renderItem={renderItem}
@@ -126,4 +127,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginTop: Platform.OS === "android" ? 40 : 0,
   },
+  info:{
+    fontSize: 16,
+    fontWeight: "bold",
+    paddingLeft: 16,
+  }
 });

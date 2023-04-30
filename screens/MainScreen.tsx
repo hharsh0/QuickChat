@@ -46,6 +46,7 @@ const MainScreen = () => {
   const [groups, setGroups] = useState<any>([]);
   const [detailsToRender, setDetailsToRender] = useState<any>();
   const [latestMessages, setLatestMessages] = useState<any>();
+  const [otherUsersArray, setOtherUsersArray] = useState<any>();
   const [loading, setLoading] = useState(true);
 
 
@@ -114,30 +115,32 @@ const MainScreen = () => {
 
       getUserName(otherUsers(groups, currentUser)).then((namesArrayWithUid) => {
         // console.log(namesArrayWithUid);
-       const newArray:any = [];
-       otherUsersArray.forEach((otherUser:any) => {
-         const correspondingName = namesArrayWithUid.find(
-           (name:any) => name.uid === otherUser.otherUserId
-         );
-         if (correspondingName) {
-           const newItem = {
-             uid: otherUser.otherUserId,
-             name: correspondingName.name,
-             docId: otherUser.docId,
-           };
-           newArray.push(newItem);
-         }
-        //  console.log(newArray)
-         setDetailsToRender(newArray)
-       });
+        const newArray: any = [];
+        otherUsersArray.forEach((otherUser: any) => {
+          const correspondingName = namesArrayWithUid.find(
+            (name: any) => name.uid === otherUser.otherUserId
+          );
+          if (correspondingName) {
+            const newItem = {
+              uid: otherUser.otherUserId,
+              name: correspondingName.name,
+              docId: otherUser.docId,
+            };
+            newArray.push(newItem);
+          }
+          //  console.log(newArray)
+          setDetailsToRender(newArray);
+        });
       });
 
-      getLatestMessages(otherUsersArray).then((latestMessages) => {
-        setLatestMessages(latestMessages);
-        console.log(latestMessages);
-      });
+      // getLatestMessages(otherUsersArray);
+      setOtherUsersArray(otherUsersArray);
     }
   }, [groups]);
+
+  useEffect(()=>{
+    console.log("hello",latestMessages)
+  },[latestMessages])
 
   const getLatestMessages = async (otherUsersArray: any) => {
     const latestMessages: any = [];
@@ -151,21 +154,60 @@ const MainScreen = () => {
         orderBy("createdAt", "desc"),
         limit(1)
       );
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        // console.log(querySnapshot.docs[0].data());
-        const messageData = querySnapshot.docs[0].data();
-        latestMessages.push({
-          groupId: groupId,
-          message: messageData.message,
-          createdAt: messageData.createdAt,
-          sentBy: messageData.sentBy,
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            console.log("New message:", change.doc.data());
+            const existingMessageIndex = latestMessages.findIndex(
+              (msg:any) => msg.groupId === groupId
+            );
+            const messageData = change.doc.data();
+            if (existingMessageIndex !== -1) {
+              // If a message with the same groupId exists, update it with the latest data
+              console.log("not triggered");
+              latestMessages[existingMessageIndex] = {
+                groupId: groupId,
+                message: messageData.message,
+                createdAt: messageData.createdAt,
+                sentBy: messageData.sentBy,
+              };
+              setLatestMessages(latestMessages);
+            } else {
+              // If a message with the same groupId does not exist, add a new object to latestMessages
+              console.log("triggered")
+              latestMessages.push({
+                groupId: groupId,
+                message: messageData.message,
+                createdAt: messageData.createdAt,
+                sentBy: messageData.sentBy,
+              });
+              setLatestMessages([...latestMessages]);
+            }
+          }
         });
-      }
+      });
+      // const querySnapshot = await getDocs(q);
+      // if (!querySnapshot.empty) {
+      //   const messageData = querySnapshot.docs[0].data();
+      //   latestMessages.push({
+      //     groupId: groupId,
+      //     message: messageData.message,
+      //     createdAt: messageData.createdAt,
+      //     sentBy: messageData.sentBy,
+      //   });
+      // }
     }
+    
 
-    return latestMessages;
+    // setLatestMessages(latestMessages);
+
   };
+
+  useEffect(()=>{
+    if(otherUsersArray){
+      getLatestMessages(otherUsersArray)
+    }
+  },[otherUsersArray])
 
   const handlePress = (item:any) => {
     navigation.navigate("Chat", { name: item.name, groupId: item.docId });
@@ -188,11 +230,14 @@ const MainScreen = () => {
             detail={
               latestMessages?.find(
                 (message: any) => message.groupId === item.docId
-              )?.sentBy === currentUser? "You: " + latestMessages?.find(
-                (message: any) => message.groupId === item.docId
-              )?.message : latestMessages?.find(
-                (message: any) => message.groupId === item.docId
-              )?.message
+              )?.sentBy === currentUser
+                ? "You: " +
+                  latestMessages?.find(
+                    (message: any) => message.groupId === item.docId
+                  )?.message
+                : latestMessages?.find(
+                    (message: any) => message.groupId === item.docId
+                  )?.message
             }
           />
         )}
