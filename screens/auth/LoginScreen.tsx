@@ -3,9 +3,9 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingVi
 import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { projectAuth } from "../firebase/config";
-import { AuthContext } from "../store/auth-context";
-import LoadingScreen from "./LoadingScreen";
+import { projectAuth } from "../../firebase/config";
+import { AuthContext } from "../../store/auth-context";
+import LoadingScreen from "../LoadingScreen";
 
 const LoginScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState("");

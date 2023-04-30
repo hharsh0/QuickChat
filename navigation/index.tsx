@@ -9,8 +9,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../constants/theme";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ChatNav from "../components/ChatNav";
-import LoginScreen from "../screens/LoginScreen";
-import SignUpScreen from "../screens/SignUpScreen";
+import LoginScreen from "../screens/auth/LoginScreen";
+import SignUpScreen from "../screens/auth/SignUpScreen";
 import Header from "../components/Header";
 
 const Tab = createBottomTabNavigator();

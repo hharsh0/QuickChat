@@ -1,10 +1,10 @@
 import { useState, useContext } from "react";
 import { View, Text, TextInput, Pressable, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { projectAuth, projectFirestore } from "../firebase/config";
-import { AuthContext } from "../store/auth-context";
+import { projectAuth, projectFirestore } from "../../firebase/config";
+import { AuthContext } from "../../store/auth-context";
 import { collection, doc, setDoc } from "firebase/firestore";
-import LoadingScreen from "./LoadingScreen";
+import LoadingScreen from "../LoadingScreen";
 
 const SignUpScreen = ({ navigation }: any) => {
   const [displayName, setDisplayName] = useState("");

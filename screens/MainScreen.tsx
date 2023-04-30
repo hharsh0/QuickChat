@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import ListItem from "../components/ListItem";
 import Header from "../components/Header";
-import { data } from "../data";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useContext, useState, useEffect } from "react";
@@ -21,7 +20,6 @@ import {
   getDocs,
   orderBy,
   limit,
-  doc
 } from "firebase/firestore";
 import { projectFirestore } from "../firebase/config";
 import LoadingScreen from "./LoadingScreen";

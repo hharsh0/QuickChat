@@ -30,7 +30,7 @@ const ChatScreen = () => {
   const [text, setText] = useState<string>("");
   const [messages, setMessages] = useState<any>([]);
   const route = useRoute();
-  const name = (route.params as { name: string } | undefined)?.name;
+  // const name = (route.params as { name: string } | undefined)?.name;
   const groupId = (route.params as { groupId: string } | undefined)?.groupId;
   const messageRef = collection(projectFirestore, "messages", groupId, "message");
   const authCtx = useContext(AuthContext);
