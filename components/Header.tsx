@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#e9e9e9",
-    borderRadius: theme.borderRadius.m,
+    borderRadius: 100,
     paddingHorizontal: 10,
     marginTop: 15,
   },
