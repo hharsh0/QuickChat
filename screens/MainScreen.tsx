@@ -50,7 +50,6 @@ const MainScreen = () => {
   const [loading, setLoading] = useState(true);
   const isFocused = useIsFocused();
 
-
   const currentUser = authCtx.uid;
 
   // console.log(isFocused)

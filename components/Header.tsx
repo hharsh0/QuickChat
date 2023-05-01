@@ -1,4 +1,15 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Pressable, SafeAreaView, Platform } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+  SafeAreaView,
+  Platform,
+  Dimensions,
+} from "react-native";
 import { theme } from "../constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../store/auth-context";
@@ -10,8 +21,11 @@ interface props {
 
 const Header = ({ title }: props) => {
   const authCtx = useContext(AuthContext);
+  const { height } = Dimensions.get("window");
+  const marginTop = Platform.OS === "android" ? height * 0.06 : 0;
+  console.log(marginTop);
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{marginTop}]}>
       <View style={styles.head}>
         <Pressable style={styles.start}>
           <Image
@@ -58,9 +72,10 @@ const styles = StyleSheet.create({
   container: {
     // padding: 10,
     backgroundColor: theme.colors.white,
+    // backgroundColor: "red",
     paddingVertical: 16,
     paddingHorizontal: 10,
-    marginTop: Platform.OS === "android" ? 44 : 0,
+    // marginTop: Platform.OS === "android" ? 49 : 0,
   },
   title: {
     fontSize: 35,

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, Platform, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image, Platform, SafeAreaView, Dimensions } from "react-native";
 import React, {useEffect} from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -11,6 +11,9 @@ const ChatNav = () => {
   const groupId = (route.params as { groupId: string } | undefined)?.groupId;
   const image = (route.params as { image: string } | undefined)?.image;
 
+  const { height } = Dimensions.get("window");
+  const marginTop = Platform.OS === "android" ? height * 0.06 : 0;
+
 
   useEffect(()=>{
   console.log("chatNav.tsx", name, groupId);
@@ -22,7 +25,7 @@ const ChatNav = () => {
   }
 
   return (
-    <SafeAreaView style={styles.outerContainer}>
+    <SafeAreaView style={[styles.outerContainer, {marginTop}]}>
       <View style={styles.container}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -72,7 +75,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     justifyContent: "space-between",
-    marginTop: Platform.OS === "android" ? 44 : 0,
+    // marginTop: Platform.OS === "android" ? 44 : 0,
   },
   outerContainer:{
     flex: 1,
