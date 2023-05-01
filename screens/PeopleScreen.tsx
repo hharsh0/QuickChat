@@ -33,12 +33,13 @@ const PeopleScreen = ({navigation}:any) => {
         });
         setUsers(users);
         setLoading(false);
+        console.log(users)
       }
     );
     return () => unsubscribe();
   }, []);
 
-  const handlePress = async (uid: any, displayName: any) => {
+  const handlePress = async (uid: any, displayName: string, photoURL: string) => {
     const currentUser = authCtx.uid;
     const otherUser = uid;
     setLoading(true);
@@ -66,6 +67,7 @@ const PeopleScreen = ({navigation}:any) => {
         navigation.navigate("Chat", {
           name: displayName,
           groupId: groupId,
+          image: photoURL,
         });
         setLoading(false);
         return;
@@ -90,6 +92,7 @@ const PeopleScreen = ({navigation}:any) => {
         navigation.navigate("Chat", {
           groupId: docRef.id,
           name: displayName,
+          image: photoURL,
         });
         setLoading(false);
       }
@@ -103,7 +106,14 @@ const PeopleScreen = ({navigation}:any) => {
     return <LoadingScreen />
   }
 
-  const renderItem = ({ item }:any) => <PeopleListItem name={item.displayName} uid={item.uid} onPress={()=>handlePress(item.uid, item.displayName)} />;
+  const renderItem = ({ item }: any) => (
+    <PeopleListItem
+      name={item.displayName}
+      uid={item.uid}
+      image={item.photoURL}
+      onPress={() => handlePress(item.uid, item.displayName, item.photoURL)}
+    />
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -125,7 +135,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    marginTop: Platform.OS === "android" ? 40 : 0,
   },
   info:{
     fontSize: 16,

@@ -23,6 +23,8 @@ import {
 } from "firebase/firestore";
 import { projectFirestore } from "../firebase/config";
 import LoadingScreen from "./LoadingScreen";
+import { useIsFocused } from "@react-navigation/native";
+
 
 
 const otherUsers = (data: any, currentUser: string) => {
@@ -46,11 +48,12 @@ const MainScreen = () => {
   const [latestMessages, setLatestMessages] = useState<any>();
   const [otherUsersArray, setOtherUsersArray] = useState<any>();
   const [loading, setLoading] = useState(true);
+  const isFocused = useIsFocused();
 
 
   const currentUser = authCtx.uid;
 
-  
+  // console.log(isFocused)
 
   useEffect(() => {
     const unsubscribe = () => {}; // declare empty unsubscribe function to use later
@@ -95,6 +98,7 @@ const MainScreen = () => {
           namesArrayWithUid.push({
             name: doc.data().displayName,
             uid: doc.id,
+            image: doc.data().photoURL
           });
         }
       });
@@ -109,10 +113,12 @@ const MainScreen = () => {
   useEffect(() => {
     if (groups) {
       const otherUsersArray = otherUsers(groups, currentUser);
-      // console.log(otherUsersArray)
+      // [{"docId": "69sO4PnJtCw5GUzjYbMC", "otherUserId": "rXzm9jeIh7eHIwDSwSzr"}, {"docId": "DmyDwboVKICjzq5Qxmgo", "otherUserId": "seKT2LhnTGTd2h93yrhpezT2uR12"}, {"docId": "UxQezluUQpac2XJKGHIP", "otherUserId": "lGByuBrzPsMpXJNzjECaUluA6Q43"}, {"docId": "Z5jfmSgzdzwYRLx6o3nH", "otherUserId": "2r5vsnPv4sTTaqwmEM4OsCaGor82"}, {"docId": "hx1Bl5WH2HuugEgx6M5d", "otherUserId": undefined}, {"docId": "mZVNsUPIpsgZpnDAHZbI", "otherUserId": "exEuiBwVkdhIuGLjfkZPzaUvjzZ2"}]
+      // console.log("other",otherUsersArray)
 
       getUserName(otherUsers(groups, currentUser)).then((namesArrayWithUid) => {
-        // console.log(namesArrayWithUid);
+        // console.log("other", namesArrayWithUid);
+        // [{"image": "https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492__340.jpg", "name": "harsh2", "uid": "2r5vsnPv4sTTaqwmEM4OsCaGor82"}]
         const newArray: any = [];
         otherUsersArray.forEach((otherUser: any) => {
           const correspondingName = namesArrayWithUid.find(
@@ -123,10 +129,12 @@ const MainScreen = () => {
               uid: otherUser.otherUserId,
               name: correspondingName.name,
               docId: otherUser.docId,
+              image: correspondingName.image
             };
             newArray.push(newItem);
           }
-          //  console.log(newArray)
+          //  console.log("new",newArray)
+          //  [{"docId": "69sO4PnJtCw5GUzjYbMC", "image": "https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492__340.jpg", "name": "Name", "uid": "rXzm9jeIh7eHIwDSwSzr"}]
           setDetailsToRender(newArray);
         });
       });
@@ -136,9 +144,9 @@ const MainScreen = () => {
     }
   }, [groups]);
 
-  useEffect(()=>{
-    console.log("hello",latestMessages)
-  },[latestMessages])
+  // useEffect(()=>{
+  //   console.log("hello",latestMessages)
+  // },[latestMessages])
 
   const getLatestMessages = async (otherUsersArray: any) => {
     const latestMessages: any = [];
@@ -155,14 +163,14 @@ const MainScreen = () => {
       const unsubscribe = onSnapshot(q, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === "added") {
-            console.log("New message:", change.doc.data());
+            // console.log("New message:", change.doc.data());
             const existingMessageIndex = latestMessages.findIndex(
               (msg:any) => msg.groupId === groupId
             );
             const messageData = change.doc.data();
             if (existingMessageIndex !== -1) {
               // If a message with the same groupId exists, update it with the latest data
-              console.log("not triggered");
+              // console.log("not triggered");
               latestMessages[existingMessageIndex] = {
                 groupId: groupId,
                 message: messageData.message,
@@ -172,7 +180,7 @@ const MainScreen = () => {
               setLatestMessages(latestMessages);
             } else {
               // If a message with the same groupId does not exist, add a new object to latestMessages
-              console.log("triggered")
+              // console.log("triggered")
               latestMessages.push({
                 groupId: groupId,
                 message: messageData.message,
@@ -201,11 +209,12 @@ const MainScreen = () => {
 
   };
 
+  // if focused is added to re render when on focus
   useEffect(()=>{
     if(otherUsersArray){
       getLatestMessages(otherUsersArray)
     }
-  },[otherUsersArray])
+  },[otherUsersArray, isFocused])
 
   const handlePress = (item:any) => {
     navigation.navigate("Chat", { name: item.name, groupId: item.docId });
@@ -218,13 +227,15 @@ const MainScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#fff" style="dark" />
-      <Header title="Chats" />
+      {/* <Header title="Chats" /> */}
       <FlatList
         data={detailsToRender}
         renderItem={({ item }) => (
           <ListItem
             onPress={() => handlePress(item)}
+
             name={item.name ? item.name : currentUser}
+            image={item.image}
             detail={
               latestMessages?.find(
                 (message: any) => message.groupId === item.docId
@@ -249,7 +260,7 @@ export default MainScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: Platform.OS === "android" ? 40 : 0,
+    // marginTop: Platform.OS === "android" ? 40 : 0,
     backgroundColor: "#fff",
   },
 });

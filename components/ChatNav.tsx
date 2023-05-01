@@ -9,11 +9,17 @@ const ChatNav = () => {
   const route = useRoute();
   const name = (route.params as { name: string } | undefined)?.name;
   const groupId = (route.params as { groupId: string } | undefined)?.groupId;
+  const image = (route.params as { image: string } | undefined)?.image;
 
 
   useEffect(()=>{
   console.log("chatNav.tsx", name, groupId);
   },[])
+
+  const handlePress = ()=>{
+    console.log("pressed")
+    //navigate to the person's profile
+  }
 
   return (
     <SafeAreaView style={styles.outerContainer}>
@@ -22,7 +28,8 @@ const ChatNav = () => {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="chevron-back-outline" size={32} color="#0584FE" />
           </TouchableOpacity>
-          <View
+          <TouchableOpacity
+            onPress={handlePress}
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -31,7 +38,7 @@ const ChatNav = () => {
             }}
           >
             <Image
-              source={{ uri: "https://picsum.photos/200/300" }}
+              source={{ uri: image? image: "https://picsum.photos/200/300" }}
               style={{
                 width: 36,
                 height: 36,
@@ -39,7 +46,7 @@ const ChatNav = () => {
               }}
             />
             <Text style={{ fontSize: 22 }}>{name}</Text>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View style={{ flexDirection: "row", gap: 20, alignItems: "center" }}>

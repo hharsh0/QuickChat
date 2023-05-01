@@ -71,8 +71,8 @@ const BottomNavigation = () => {
             ),
             tabBarActiveTintColor: theme.colors.bottomTabIcon,
             tabBarLabelStyle: { display: "none" },
-            headerShown: false,
-            // header: () => <Header title="Chats" />,
+            // headerShown: false,
+            header: () => <Header title="Chats" />,
           }}
         />
         <Tab.Screen

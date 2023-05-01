@@ -9,7 +9,9 @@ export default function App() {
     <AuthContextProvider>
       <StatusBar style="dark" />
       <NavigationContainer>
-        <Navigation />
+        <SafeAreaView style={{flex: 1}}>
+          <Navigation />
+        </SafeAreaView>
       </NavigationContainer>
     </AuthContextProvider>
   );

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Pressable, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Pressable, SafeAreaView, Platform } from "react-native";
 import { theme } from "../constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../store/auth-context";
@@ -13,7 +13,7 @@ const Header = ({ title }: props) => {
   return (
     <View style={styles.container}>
       <View style={styles.head}>
-        <Pressable onPress={()=> authCtx.logout()} style={styles.start}>
+        <Pressable style={styles.start}>
           <Image
             source={{ uri: "https://picsum.photos/200/300" }}
             style={styles.img}
@@ -22,11 +22,15 @@ const Header = ({ title }: props) => {
         </Pressable>
         {title !== "Discover" && (
           <View style={styles.end}>
-            <TouchableOpacity style={styles.icon}>
+            {/* <TouchableOpacity style={styles.icon}>
               <Ionicons name="ios-camera" size={28} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.icon}>
-              <Ionicons name="ios-create-outline" size={28} color="black" />
+            </TouchableOpacity> */}
+            <TouchableOpacity
+              onPress={() => authCtx.logout()}
+              style={styles.icon}
+            >
+              {/* <Ionicons name="ios-create-outline" size={28} color="black" /> */}
+              <Ionicons name="log-out-outline" size={28} color="black" />
             </TouchableOpacity>
           </View>
         )}
@@ -52,10 +56,11 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    // padding: 10,
     backgroundColor: theme.colors.white,
     paddingVertical: 16,
-    // backgroundColor: "red",
+    paddingHorizontal: 10,
+    marginTop: Platform.OS === "android" ? 44 : 0,
   },
   title: {
     fontSize: 35,
@@ -91,6 +96,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     paddingHorizontal: 10,
     marginTop: 15,
+    paddingVertical: 2,
   },
   input: { flex: 1, fontSize: 20, color: "#333", paddingVertical: 10 },
 });

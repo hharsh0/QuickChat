@@ -2,12 +2,12 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import { theme } from "../constants/theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";import TouchableButton from "./Touchable";
 
-const PeopleListItem = ({ onPress, name, uid }: any) => {
+const PeopleListItem = ({ onPress, name, uid, image }: any) => {
   return (
     <TouchableButton onPress={onPress} style={styles.container}>
       <View style={styles.innerContainer}>
         <Image
-          source={{ uri: "https://picsum.photos/200/300" }}
+          source={{ uri: image ? image : "https://picsum.photos/200/300" }}
           style={styles.img}
         />
         <View style={styles.info}>
