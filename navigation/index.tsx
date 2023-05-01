@@ -84,7 +84,8 @@ const BottomNavigation = () => {
             ),
             tabBarActiveTintColor: theme.colors.bottomTabIcon,
             tabBarLabelStyle: { display: "none" },
-            headerShown: false,
+            // headerShown: false,
+            header: () => <Header title="Contacts" />,
           }}
         />
         {/* <Tab.Screen

@@ -117,7 +117,7 @@ const PeopleScreen = ({navigation}:any) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Contacts" />
+      {/* <Header title="Contacts" /> */}
       <StatusBar backgroundColor="#fff" style="dark" />
       {/* <Text style={styles.info}>All Contacts</Text> */}
       <FlatList
