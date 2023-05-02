@@ -56,12 +56,13 @@ const ChatScreen = () => {
 
   const sendMessage = async () => {
     if (text && authCtx) {
+      const messageToSend = text;
+      setText("");
       await addDoc(messageRef, {
-        message: text,
+        message: messageToSend,
         sentBy: authCtx.uid,
         createdAt: serverTimestamp(),
       });
-      setText("");
     }
   };
 

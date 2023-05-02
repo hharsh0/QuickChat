@@ -26,7 +26,7 @@ const Header = ({ title }: props) => {
   const statusBarHeight = StatusBar.currentHeight || 0;
   const marginTop = Platform.OS === "android" ? statusBarHeight : 0;
   console.log(statusBarHeight);
-   console.log("top", marginTop);
+  // console.log("top", marginTop);
   return (
     <View style={[styles.container
     ,{marginTop}
