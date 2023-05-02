@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Platform,
   Dimensions,
+  StatusBar,
 } from "react-native";
 import { theme } from "../constants/theme";
 import { Ionicons } from "@expo/vector-icons";
@@ -22,10 +23,14 @@ interface props {
 const Header = ({ title }: props) => {
   const authCtx = useContext(AuthContext);
   const { height } = Dimensions.get("window");
-  const marginTop = Platform.OS === "android" ? height * 0.06 : 0;
-  console.log(marginTop);
+  const statusBarHeight = StatusBar.currentHeight || 0;
+  const marginTop = Platform.OS === "android" ? statusBarHeight : 0;
+  console.log(statusBarHeight);
+   console.log("top", marginTop);
   return (
-    <View style={[styles.container,{marginTop}]}>
+    <View style={[styles.container
+    ,{marginTop}
+    ]}>
       <View style={styles.head}>
         <Pressable style={styles.start}>
           <Image

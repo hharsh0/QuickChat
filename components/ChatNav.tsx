@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, Platform, SafeAreaView, Dimensions } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image, Platform, SafeAreaView, Dimensions, StatusBar } from "react-native";
 import React, {useEffect} from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -12,7 +12,8 @@ const ChatNav = () => {
   const image = (route.params as { image: string } | undefined)?.image;
 
   const { height } = Dimensions.get("window");
-  const marginTop = Platform.OS === "android" ? height * 0.06 : 0;
+  const statusBarHeight = StatusBar.currentHeight || 0;
+  const marginTop = Platform.OS === "android" ? statusBarHeight : 0;
 
 
   useEffect(()=>{
