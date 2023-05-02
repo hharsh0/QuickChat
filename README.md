@@ -4,10 +4,12 @@ ChatApp is a messaging app built using React Native that allows users to communi
 
 ## Screenshots
 
-<img src="/assets/screenshots/loginScreen.png" alt="Login Screen" height="400" width="200"/>
-<img src="/assets/screenshots/signUpScreen.png" alt="Login Screen" height="400" width="200"/>
-<img src="/assets/screenshots/chatScreen.png" alt="Login Screen" height="400" width="200"/>
-<img src="/assets/screenshots/mainScreen.png" alt="Login Screen" height="400" width="200"/>
+<div style="display:flex;flex-direction:row;justify-content:space-between;">
+  <img src="/assets/screenshots/loginScreen.png" alt="Login Screen" height="400" width="200"/>
+  <img src="/assets/screenshots/signUpScreen.png" alt="Login Screen" height="400" width="200"/>
+  <img src="/assets/screenshots/chatScreen.png" alt="Login Screen" height="400" width="200"/>
+  <img src="/assets/screenshots/mainScreen.png" alt="Login Screen" height="400" width="200"/>
+</div>
 
 ## Features
 
